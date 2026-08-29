@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -49,42 +50,39 @@ public class DigimonController {
 
     @PostMapping
     public ResponseEntity<Digimon> cadastrar(@RequestBody Digimon digimon) {
-        String nome = digimon.getNome();
-        String atributo = digimon.getAtributo();
-        String nivel = digimon.getNome();
-        String familia = digimon.getFamilia();
-        String imagem = digimon.getImagem();
-
         if (!validado(digimon)){
             return ResponseEntity.status(400).build();
-        } else {
-            Integer countId = getCountId(nome);
+        }
 
-            if(countId != null && countId > 0) {
-                return ResponseEntity.status(409).build();
-            } else {
-                String sql = """
-                INSERT INTO digimon (nome, atributo, nivel, familia, imagem) VALUES (?, ?, ?, ?, ?);
+        Integer countId = getCountId(digimon.getNome());
+
+        if (countId != null && countId > 0) {
+            return ResponseEntity.status(409).build();
+        }
+
+        String sql = """
+                INSERT INTO digimon (nome, poder, atributo, nivel, familia, imagem, dataRegistro) 
+                VALUES (?, ?, ?, ?, ?, ?, ?);
                 """;
 
-                KeyHolder keyHolder = new GeneratedKeyHolder();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-                jdbcTemplate.update(con -> {
-                    PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                    ps.setString(1, nome);
-                    ps.setString(2, atributo);
-                    ps.setString(3, nivel);
-                    ps.setString(4, familia);
-                    ps.setString(5, imagem);
-                    return ps;
-                }, keyHolder);
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, digimon.getNome());
+            ps.setInt(2, digimon.getPoder());
+            ps.setString(3, digimon.getAtributo());
+            ps.setString(4, digimon.getNivel().name()); // Salva o nome da constante do Enum
+            ps.setString(5, digimon.getFamilia());
+            ps.setString(6, digimon.getImagem());
+            ps.setObject(7, digimon.getDataRegistro()); // Salva a data corretamente
+            return ps;
+        }, keyHolder);
 
-                Integer idGerado = keyHolder.getKeyAs(Integer.class);
-                digimon.setId(idGerado);
+        Integer idGerado = keyHolder.getKeyAs(Integer.class);
+        digimon.setId(idGerado);
 
-                return ResponseEntity.status(201).body(digimon);
-            }
-        }
+        return ResponseEntity.status(201).body(digimon);
     }
 
     private @Nullable Integer getCountId(String nome) {
@@ -92,26 +90,20 @@ public class DigimonController {
                 SELECT COUNT(*) FROM digimon
                     WHERE LOWER(nome) = LOWER(?);
                 """;
-
         return jdbcTemplate.queryForObject(sqlRepetido, Integer.class, nome);
     }
 
     public Boolean validado(Digimon digimon){
-        String nome = digimon.getNome();
-        String atributo = digimon.getAtributo();
-        String nivel = digimon.getNome();
-        String familia = digimon.getFamilia();
-        String imagem = digimon.getImagem();
-
-        if (nome == null || nome.isBlank() ||
-                atributo == null || atributo.isBlank() ||
-                nivel == null || nivel.isBlank() ||
-                familia == null || familia.isBlank() ||
-                imagem == null || imagem.isBlank()) {
+        if (digimon.getNome() == null || digimon.getNome().isBlank() ||
+                digimon.getPoder() == null || digimon.getPoder() < 0 ||
+                digimon.getAtributo() == null || digimon.getAtributo().isBlank() ||
+                digimon.getNivel() == null || // Valida se o Enum foi passado
+                digimon.getFamilia() == null || digimon.getFamilia().isBlank() ||
+                digimon.getImagem() == null || digimon.getImagem().isBlank() ||
+                digimon.getDataRegistro() == null) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     public Boolean existe(Integer id){
@@ -158,18 +150,25 @@ public class DigimonController {
             return ResponseEntity.status(409).build();
 
         String sql = """
-               UPDATE digimon SET nome = ?, atributo = ?, nivel = ?, familia = ?, imagem = ? WHERE id = ?;
+               UPDATE digimon 
+               SET nome = ?, poder = ?, atributo = ?, nivel = ?, familia = ?, imagem = ?, dataRegistro = ? 
+               WHERE id = ?;
                """;
-
-        String nome = digimon.getNome();
-        String atributo = digimon.getAtributo();
-        String nivel = digimon.getNome();
-        String familia = digimon.getFamilia();
-        String imagem = digimon.getImagem();
 
         digimon.setId(id);
 
-        jdbcTemplate.update(sql, nome, atributo, nivel, familia, imagem, id);
+        jdbcTemplate.update(
+                sql,
+                digimon.getNome(),
+                digimon.getPoder(),
+                digimon.getAtributo(),
+                digimon.getNivel().name(),
+                digimon.getFamilia(),
+                digimon.getImagem(),
+                digimon.getDataRegistro(),
+                id
+        );
+
         return ResponseEntity.status(200).body(digimon);
     }
 }
