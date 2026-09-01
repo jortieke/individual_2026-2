@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/digimons")
 public class DigimonController {

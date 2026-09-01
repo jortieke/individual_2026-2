@@ -3,13 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Document</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        main {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        .form-section, .cards-section {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-section {
+            flex: 1; 
+            min-width: 350px;
+        }
+
+        .cards-section {
+            flex: 2; 
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-content: flex-start;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+    
+        .card {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid #f39c12;
+            border-radius: 8px;
+            padding: 15px;
+            width: calc(50% - 10px); /* 2 cards por linha */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <header></header>
     <main>
-        <section style="border: 2px solid red;">a</section>
-        <section style="border: 2px solid blue;">a</section>
+        <section class="form-section">
+            <h2>Cadastrar Digimon</h2>
+            <form id="digimonForm">
+                
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" placeholder="Ex: Agumon" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="poder">Poder (Int):</label>
+                    <input type="number" id="poder" name="poder" placeholder="Ex: 10" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="atributo">Atributo:</label>
+                    <input type="text" id="atributo" name="atributo" placeholder="Ex: Vacina" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nivel">Nível:</label>
+                    <select id="nivel" name="nivel" required>
+                        <option value="">Selecione um nível...</option>
+                        <option value="Treinamento">Treinamento</option>
+                        <option value="Criança">Criança</option>
+                        <option value="Adulto">Adulto</option>
+                        <option value="Perfeito">Perfeito</option>
+                        <option value="Mega">Mega</option>
+                        <option value="Jogress">Jogress</option>
+                        <option value="Armadura">Armadura</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Família (Selecione):</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="DR"> DR</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="NS"> NS</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="VB"> VB</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="DS"> DS</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="JT"> JT</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="WG"> WG</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="DA"> DA</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="ME"> ME</label>
+                        <label class="checkbox-item"><input type="checkbox" name="familia" value="UK"> UK</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dataRegistro">Data de Registro:</label>
+                    <input type="date" id="dataRegistro" name="dataRegistro" required>
+                </div>
+
+                <button type="submit">Salvar Digimon</button>
+            </form>
+        </section>
+        <section class="cards-section">
+            <h2>Digimons Cadastrados</h2>
+
+            <div style="width: 100%; margin-bottom: 15px;">
+                <label for="filtroNivel" style="font-weight: bold; margin-right: 10px;">Filtrar por Nível:</label>
+                <select id="filtroNivel" style="width: auto; display: inline-block; padding: 5px;">
+                    <option value="TODOS">Todos</option>
+                </select>
+            </div>
+
+            <div id="listaCards" style="display: flex; flex-wrap: wrap; gap: 20px; width: 100%;">
+            </div>
+        </section>
     </main>
 </body>
 </html>
+
+<script>
+    const API_URL = 'http://localhost:8080/digimons';
+    let digimonsEmMemoria = []; 
+
+    const checkboxesFamilia = document.querySelectorAll('input[name="familia"]');
+    checkboxesFamilia.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                checkboxesFamilia.forEach(outro => {
+                    if (outro !== this) outro.checked = false;
+                });
+            }
+        });
+    });
+
+    async function carregarDigimons() {
+        try {
+            const resposta = await fetch(API_URL);
+            if (resposta.ok) {
+                digimonsEmMemoria = await resposta.json();
+                
+                atualizarOpcoesFiltro();
+                renderizarCards(digimonsEmMemoria);
+            }
+        } catch (erro) {
+            console.error("Erro ao buscar do backend (o servidor está rodando?):", erro);
+        }
+    }
+
+    function atualizarOpcoesFiltro() {
+        const selectFiltro = document.getElementById('filtroNivel');
+        const nivelAtualSelecionado = selectFiltro.value; 
+        const niveisUnicos = [...new Set(digimonsEmMemoria.map(d => d.nivel))];
+
+        selectFiltro.innerHTML = '<option value="TODOS">Todos</option>';
+
+        niveisUnicos.forEach(nivel => {
+            const option = document.createElement('option');
+            option.value = nivel;
+            option.textContent = nivel;
+            selectFiltro.appendChild(option);
+        });
+
+        if (niveisUnicos.includes(nivelAtualSelecionado)) {
+            selectFiltro.value = nivelAtualSelecionado;
+        }
+    }
+
+    function renderizarCards(listaDigimons) {
+        const container = document.getElementById('listaCards');
+        container.innerHTML = '';
+
+        if (listaDigimons.length === 0) {
+            container.innerHTML = '<p>Nenhum digimon encontrado.</p>';
+            return;
+        }
+
+        listaDigimons.forEach(digimon => {
+            let dataFormatada = digimon.dataRegistro;
+            if(dataFormatada.includes('-')) {
+                const partes = dataFormatada.split('-');
+                dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="${digimon.imagem}" alt="${digimon.nome}" style="width: 100%; border-radius: 5px; margin-bottom: 10px; max-height: 120px; object-fit: contain;">
+                <h3>${digimon.nome}</h3>
+                <p><strong>Poder:</strong> ${digimon.poder}</p>
+                <p><strong>Atributo:</strong> ${digimon.atributo}</p>
+                <p><strong>Nível:</strong> ${digimon.nivel}</p>
+                <p><strong>Família:</strong> ${digimon.familia}</p>
+                <p><strong>Registro:</strong> ${dataFormatada}</p>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    document.getElementById('filtroNivel').addEventListener('change', function() {
+        const nivelSelecionado = this.value;
+        
+        if (nivelSelecionado === "TODOS") {
+            renderizarCards(digimonsEmMemoria);
+        } else {
+            const filtrados = digimonsEmMemoria.filter(d => d.nivel === nivelSelecionado);
+            renderizarCards(filtrados);
+        }
+    });
+
+    document.getElementById('digimonForm').addEventListener('submit', async function(evento) {
+        evento.preventDefault(); 
+
+        const familiaSelecionada = document.querySelector('input[name="familia"]:checked');
+        if (!familiaSelecionada) {
+            alert("Por favor, selecione uma Família!");
+            return;
+        }
+
+        const nome = document.getElementById('nome').value.trim();
+        
+        const nomeFormatadoParaImg = nome.toLowerCase().replace(/\s+/g, '');
+        const imagemUrl = `https://digimon.net/cimages/digimon/${nomeFormatadoParaImg}.jpg`;
+
+        const novoDigimon = {
+            nome: nome,
+            poder: parseInt(document.getElementById('poder').value),
+            atributo: document.getElementById('atributo').value,
+            nivel: document.getElementById('nivel').value,
+            familia: familiaSelecionada.value,
+            imagem: imagemUrl, 
+            dataRegistro: document.getElementById('dataRegistro').value
+        };
+
+        try {
+            const resposta = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(novoDigimon)
+            });
+
+            if (resposta.status === 201) {
+                alert('Digimon cadastrado com sucesso!');
+                this.reset(); 
+                carregarDigimons(); 
+            } else if (resposta.status === 409) {
+                alert('Erro: Já existe um Digimon com este nome!');
+            } else if (resposta.status === 400) {
+                alert('Erro de validação: Verifique se todos os campos estão preenchidos corretamente.');
+            } else {
+                alert('Erro desconhecido ao cadastrar.');
+            }
+
+        } catch (erro) {
+            console.error('Erro na requisição POST:', erro);
+            alert('Não foi possível conectar ao servidor.');
+        }
+    });
+
+    window.onload = carregarDigimons;
+</script>
